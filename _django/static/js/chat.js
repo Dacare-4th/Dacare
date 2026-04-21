@@ -1,5 +1,5 @@
 const state = {
-  insurance: "Cigna",
+  insurance: "",  //클릭 시 버튼 활성화되도록 첫 화면 보험사 선택 X
   suggestion: "",
   attachedFile: "",
   rating: ""
@@ -72,7 +72,7 @@ function renderSelect() {
       <main class="main-panel">
         ${renderNoticeBar()}
         <div class="center-stage">
-          <div class="insurance-title">Please select your insurance.</div>
+          <div class="insurance-title">Please select your insurance</div>
           <div class="insurance-grid">${cards}</div>
           <div class="insurance-actions">
             <button class="primary-btn" data-nav="chat-empty">Continue</button>
@@ -82,7 +82,16 @@ function renderSelect() {
     </section>
   `;
 }
-
+function bindSelectEvents() {
+  document.querySelectorAll("[data-insurance]").forEach(el => {
+    el.addEventListener("click", () => {
+      state.insurance = el.dataset.insurance;
+      renderSelect();
+      bindSelectEvents();
+      bindPageEvents();
+    });
+  });
+}
 function renderChatShell(content) {
   return `
     <section class="app-shell">
@@ -190,4 +199,6 @@ function modalWrapper(inner, size = "medium") {
 
 document.addEventListener("DOMContentLoaded", () => {
     renderSelect();
+    bindSelectEvents();
+    bindPageEvents();
 });
